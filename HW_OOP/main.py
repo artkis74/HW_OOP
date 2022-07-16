@@ -17,6 +17,11 @@ class Student:
         else:
             return 'Ошибка'
 
+    def average_grades(self):
+        for grades in self.grades.values():
+            average_grade = round(sum(grades) / len(grades), 1)
+        return average_grade
+
 
 class Mentor:
     def __init__(self, name, surname):
@@ -29,6 +34,21 @@ class Lecturer(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
         self.grades = {}
+
+    def average_grades(self):
+        for grades in self.grades.values():
+            average_grade = round(sum(grades) / len(grades), 1)
+        return average_grade
+
+    def __str__(self):
+        res = f'Имя: {self.name}\nФамилия: {self.surname}\nСреднняя оценка: {self.average_grades()}'
+        return res
+
+    def __lt__(self, other):
+        if not isinstance(other, Lecturer):
+            print('Not a Lecturer!')
+            return
+        return self.average_grades() < other.average_grades()
 
 
 class Revicewer(Mentor):
@@ -45,12 +65,18 @@ class Revicewer(Mentor):
         else:
             return 'Ошибка'
 
+    def __str__(self):
+        res = f'Имя: {self.name}\nФамилия: {self.surname}'
+        return res
+
 
 best_student = Student('Ruoy', 'Eman', 'your_gender')
 best_student.courses_in_progress += ['Python']
 
 cool_lecturer = Lecturer('Some', 'Buddy')
 cool_lecturer.courses_attached += ['Python']
+cool_lecturer1 = Lecturer('Bob', 'Black')
+cool_lecturer1.courses_attached += ['Python']
 
 cool_revicewer = Revicewer('Mike', 'Tyson')
 cool_revicewer.courses_attached += ['Python']
@@ -59,9 +85,18 @@ cool_revicewer.rate_hw(best_student, 'Python', 10)
 cool_revicewer.rate_hw(best_student, 'Python', 10)
 cool_revicewer.rate_hw(best_student, 'Python', 10)
 
+best_student.rate_lect(cool_lecturer, 'Python', 1)
 best_student.rate_lect(cool_lecturer, 'Python', 10)
-best_student.rate_lect(cool_lecturer, 'Python', 9)
 best_student.rate_lect(cool_lecturer, 'Python', 8)
+best_student.rate_lect(cool_lecturer1, 'Python', 2)
+best_student.rate_lect(cool_lecturer1, 'Python', 4)
+best_student.rate_lect(cool_lecturer1, 'Python', 5)
 
 print(best_student.grades)
 print(cool_lecturer.grades)
+print(cool_revicewer)
+print(cool_lecturer.average_grades())
+print(best_student.average_grades())
+print(cool_lecturer1.average_grades())
+print(cool_lecturer1)
+print(cool_lecturer1 < cool_lecturer)
